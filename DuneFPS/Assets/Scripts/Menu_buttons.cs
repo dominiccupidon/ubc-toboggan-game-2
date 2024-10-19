@@ -49,4 +49,9 @@ public class SceneChanger : MonoBehaviour
     {
         SceneManager.LoadScene("Main Menu");
     }
+    
+    public void Playground()
+    {
+        SceneManager.LoadScene("Playground");
+    }
 }
