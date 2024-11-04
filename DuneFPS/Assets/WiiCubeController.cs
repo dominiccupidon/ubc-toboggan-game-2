@@ -6,6 +6,8 @@ using WiimoteApi;
 public class WiiCubeController : MonoBehaviour
 {
     public Rigidbody rb;
+    public float gravity = 10f;
+    public float force = 5f;
     private Wiimote remote;
 
     // Start is called before the first frame update
@@ -36,18 +38,19 @@ public class WiiCubeController : MonoBehaviour
         float dZ = 0f;
 
         if (remote.Button.d_up) {
-            dX += 3f;
+            dZ = 1;
         }
         if (remote.Button.d_down) {
-            dX -= 3f;
+            dZ = -1;
         }
         if (remote.Button.d_right) {
-            dZ += 3f;
+            dX = 1;
         }
         if (remote.Button.d_left) {
-            dZ -= 3f;
+            dX = -1;
         }
 
-        rb.velocity = transform.TransformDirection(new Vector3(dX, dY, dZ));
+        rb.AddForce(Vector3.down * gravity, ForceMode.Acceleration);
+        rb.AddForce(new Vector3(dX, dY, dZ) * force, ForceMode.Impulse);
     }
 }

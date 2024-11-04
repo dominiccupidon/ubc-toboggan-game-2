@@ -72,4 +72,4 @@ DuneFPS/[Aa]ssets/[Ss]treamingAssets/aa.meta
 DuneFPS/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Vim Files
-.swp
+*.swp
