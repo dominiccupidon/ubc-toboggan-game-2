@@ -7,18 +7,20 @@ using WiimoteApi;
 public class CameraController : MonoBehaviour
 {
     public Transform head;
-    public float headInitY = 0.4f;
+    public Transform rotPoint;
     public float cameraSensitivity = 10f;
     public float force = 5f;
     public float gravity = 9.81f;
+    public float crouchScale = 1.15f;
     public bool invertY = true;
+
     Wiimote remote;
     Rigidbody rb;
     Collider cl;
+    Vector3 headInitVec;
+    Vector3 headNewVec;
     bool isWiimoteConnected = false;
     float multiplier = 1f;
-    float headInitX = 0f;
-    float headInitZ = 0f;
     float rotX = 0f;
     float rotY = 0f;
     float deltaX = 0f;
@@ -36,12 +38,15 @@ public class CameraController : MonoBehaviour
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         WiimoteManager.FindWiimotes();
-        remote = WiimoteManager.Wiimotes[0]; 
-        if (remote != null)
+        if (WiimoteManager.Wiimotes.Count > 0)
         {
+            remote = WiimoteManager.Wiimotes[0]; 
             isWiimoteConnected = true;
             remote.SendDataReportMode(InputDataType.REPORT_BUTTONS); // Sends only information of button presses from the remote
         }
+        headInitVec = head.localPosition;
+        headNewVec = headInitVec;
+        headNewVec.y = -0.75f;
     }
 
     // Update is called once per frame
@@ -65,13 +70,12 @@ public class CameraController : MonoBehaviour
         rotX = Input.GetAxis("Mouse X") * cameraSensitivity;
         rotX = Mathf.Clamp(rotX, -60, 60);
         rotY = Mathf.Clamp(rotY, -45, 45);
-        head.localEulerAngles = new Vector3(rotY, 0, 0);
+        head.localEulerAngles = rotY * Vector3.right;
         transform.Rotate(rotX * Vector3.up);
     }
 
     void AcceptInput()
     {
-        float headY = headInitY;
         multiplier = 1f;
         deltaX = 0f;
         deltaY = 0f;
@@ -133,8 +137,10 @@ public class CameraController : MonoBehaviour
 
         multiplier = isRunning ? 2 : 1;
         multiplier = isCrouched ? 0.5f : multiplier;
-        headY = isCrouched ? -0.75f : headInitY;
-        head.localPosition = new Vector3(headInitX, headY, headInitZ);
+        // headY = isCrouched ? -0.75f : headInitY;
+        // TODO: Prevent gun from phasing through walls when crouched
+        //       Add a collider and have the gun move to a position unless it collides with something
+        head.localPosition = isCrouched ? headNewVec : headInitVec;
     }
 
     void MoveAround()
@@ -147,6 +153,8 @@ public class CameraController : MonoBehaviour
     void OnApplicationQuit()
     {
         // This should be uncommented for the final game
-        // WiimoteManager.Cleanup(remote);
+        if (remote != null) {
+            WiimoteManager.Cleanup(remote);
+        } 
     }
 }
