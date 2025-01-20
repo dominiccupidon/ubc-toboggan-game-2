@@ -57,12 +57,7 @@ public class EnemyBehavior : MonoBehaviour
         if (distanceToPlayer <= detectionRange && distanceToPlayer > stoppingDistance)
         {
             Vector3 targetPosition = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z);
-            Vector3 movement = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
-            Vector3 moveDir = movement - transform.position;
-            transform.position = movement;
-            moveDir.y = 0;
-            moveDir.Normalize();
-            transform.eulerAngles = new Vector3(0, Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg, 0);
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
 
             if (stopped && !speeding) 
             {
@@ -99,6 +94,14 @@ public class EnemyBehavior : MonoBehaviour
 
                 Destroy(bullet, 3f); // Destroy bullet after 3 seconds
             }
+        }
+        //Faces player if within range
+        if (distanceToPlayer <= detectionRange) 
+        {
+            Vector3 moveDir = player.transform.position - transform.position;
+            moveDir.y = 0;
+            moveDir.Normalize();
+            transform.eulerAngles = new Vector3(0, Mathf.Atan2(moveDir.x, moveDir.z) * Mathf.Rad2Deg, 0);
         }
 
     }
