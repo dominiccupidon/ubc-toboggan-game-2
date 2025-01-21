@@ -23,6 +23,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField] Material WiiDpad;
     [SerializeField] Material WiiHome;
 
+    [SerializeField] GameObject gunModel;
+
+
     Material[] BaseWiimote2 = new Material[7];
     Material[] WiiA2 = new Material[7];
     Material[] WiiB2 = new Material[7];
@@ -78,6 +81,8 @@ public class PauseManager : MonoBehaviour
     {
         controlsPanel.SetActive(true);
         pausePanel.SetActive(false);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
     }
@@ -106,6 +111,8 @@ public class PauseManager : MonoBehaviour
     {
         gameControlButtons.SetActive(true);
         UIControlButtons.SetActive(false);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         selectGame.color = selected;
         selectUI.color = notSelected;
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
@@ -114,6 +121,8 @@ public class PauseManager : MonoBehaviour
     {
         gameControlButtons.SetActive(false);
         UIControlButtons.SetActive(true);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         selectGame.color = notSelected;
         selectUI.color = selected;
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
@@ -121,22 +130,35 @@ public class PauseManager : MonoBehaviour
 
     public void HighlightA() 
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiA2;
     }
     public void HighlightB()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, -90);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiB2;
     }
     public void HighlightDPad()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiDpad2;
     }
     public void HighlightHome()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiHome2;
+    }
+    public void HighlightTrigger() 
+    {
+        wiimote3D.SetActive(false);
+        gunModel.SetActive(true);
     }
 }
