@@ -20,7 +20,7 @@ public class playerShoot : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemy = GameObject.FindGameObjectWithTag("enemy");
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
 
         if (enemy == null)
         {
@@ -67,7 +67,7 @@ public class playerShoot : MonoBehaviour
             GameObject bulletObj = Instantiate(playerBullet, bulletSpawn.position, Quaternion.identity) as GameObject;
             Rigidbody bulletRig = bulletObj.GetComponent<Rigidbody>();
 
-            bulletRig.AddForce(shootDirection * 25f, ForceMode.VelocityChange);
+            bulletRig.AddForce(shootDirection * 75f, ForceMode.VelocityChange);
             bulletRig.useGravity = false;
 
             Collider bulletCollider = bulletRig.GetComponent<Collider>();

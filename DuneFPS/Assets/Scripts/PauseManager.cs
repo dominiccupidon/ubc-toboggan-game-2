@@ -8,7 +8,6 @@ public class PauseManager : MonoBehaviour
     bool isPaused = false;
     Color notSelected;
     Color selected;
-    bool usingWiimote;
     [SerializeField ]GameObject pausePanel;
     [SerializeField] GameObject exitPanel;
     [SerializeField] GameObject controlsPanel;
@@ -39,6 +38,7 @@ public class PauseManager : MonoBehaviour
         notSelected = new Color(255f/255, 187f/255, 109f/255);
         selected = new Color(255f/255, 167f/255, 66f/255);
         pausePanel.SetActive(false);
+
 
         for (int i = 0; i < 7; i++)
         {
