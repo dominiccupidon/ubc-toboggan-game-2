@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using WiimoteApi;
 
 public class PauseManager : MonoBehaviour
 {
     bool isPaused = false;
+    bool isWiimoteConnected;
     Color notSelected;
     Color selected;
+    Wiimote remote;
     [SerializeField ]GameObject pausePanel;
     [SerializeField] GameObject exitPanel;
     [SerializeField] GameObject controlsPanel;
@@ -38,7 +41,10 @@ public class PauseManager : MonoBehaviour
         notSelected = new Color(255f/255, 187f/255, 109f/255);
         selected = new Color(255f/255, 167f/255, 66f/255);
         pausePanel.SetActive(false);
-
+        if (InputManager.Instance.remote != null) {
+            remote = InputManager.Instance.remote;
+            isWiimoteConnected = true;
+        }
 
         for (int i = 0; i < 7; i++)
         {
@@ -51,8 +57,16 @@ public class PauseManager : MonoBehaviour
     }
     void Update()
     {
-        //Remove this
-        if (Input.GetKeyDown(KeyCode.Space)){
+        bool isHomeButtonPressed = false;
+        if (isWiimoteConnected) {
+            int ret;
+            do {
+                ret = remote.ReadWiimoteData();
+            } while (ret > 0);
+            isHomeButtonPressed = remote.Button.home;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) || isHomeButtonPressed){
             PauseFunction();
         }
     }
