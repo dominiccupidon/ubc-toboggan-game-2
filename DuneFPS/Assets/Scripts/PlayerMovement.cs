@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private float speed = 5.0f;
     private float horizontalInput;
@@ -30,9 +30,9 @@ public class NewBehaviourScript : MonoBehaviour
         forwardInput = Input.GetAxis("Vertical");
 
         // Move the player based on local axes (relative to their facing direction)
-        moveDirection = orientation.forward * forwardInput + orientation.right* horizontalInput;
+        moveDirection = orientation.forward * forwardInput + orientation.right * horizontalInput;
         rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
-        
+
         if (rb.velocity.magnitude > maxSpeed)
         {
             rb.velocity = rb.velocity.normalized * maxSpeed;
@@ -52,7 +52,6 @@ public class NewBehaviourScript : MonoBehaviour
             rb.drag = 0;
         }
     }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))

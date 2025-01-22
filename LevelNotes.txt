@@ -1,0 +1,1 @@
+Make rising sand slow player after 30% rise
