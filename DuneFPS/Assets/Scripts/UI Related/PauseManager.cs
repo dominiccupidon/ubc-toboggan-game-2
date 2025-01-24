@@ -78,10 +78,12 @@ public class PauseManager : MonoBehaviour
             pausePanel.SetActive(false);
             controlsPanel.SetActive(false);
             Time.timeScale = 1;
+            Cursor.visible = false;
         }
         else {
             pausePanel.SetActive(true);
             Time.timeScale = 0;
+            Cursor.visible = true;
         }
         isPaused = !isPaused;
     }
