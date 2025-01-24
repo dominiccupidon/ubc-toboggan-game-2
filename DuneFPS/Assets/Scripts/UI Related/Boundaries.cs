@@ -14,13 +14,13 @@ public class VisibleCollider : MonoBehaviour
         {
             collisionCount++;
 
-            if (collisionCount == 1)
+            if (collisionCount < 4)
             {
                 DisplayMessage("Walking off the map is highly discouraged!", 2.5f);
             }
-            else if (collisionCount == 2)
+            else if (collisionCount >= 4)
             {
-                DisplayMessage("Dumbass.", 2.5f);
+                DisplayMessage("You Goofy Goober", 2.5f);
                 Invoke(nameof(RestartLevel), 1f);
             }
         }
