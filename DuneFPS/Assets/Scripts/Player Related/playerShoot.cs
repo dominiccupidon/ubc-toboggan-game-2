@@ -85,8 +85,12 @@ public class playerShoot : MonoBehaviour
         RaycastHit collision;
         bool didCollide = Physics.Raycast(Camera.main.transform.position, shootDirection, out collision, range);
         if (didCollide) {
-            // Write code to inflict damage on the enemy 
-            Debug.Log(collision.transform.name);
+
+            if (collision.transform.CompareTag("Enemy")) 
+            {
+                Debug.Log(collision.transform.name);
+                collision.transform.gameObject.GetComponent<EnemyBehavior>().DamageEnemy();
+            }
             GameObject impactInst = Instantiate(impactEffect, collision.point, Quaternion.LookRotation(collision.normal));
             Destroy(impactInst, 1f);
             currentShots++;
