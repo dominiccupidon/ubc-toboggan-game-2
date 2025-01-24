@@ -26,6 +26,9 @@ public class EnemyBehavior : MonoBehaviour
     private bool slowing = false;
     private float walkSpeed = 0f;
     private bool canShoot = true;
+    private bool dead = false;
+
+    public bool drawRange = true;
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
@@ -106,21 +109,17 @@ public class EnemyBehavior : MonoBehaviour
 
     }
 
-    void OnTriggerEnter(Collider other)
+    public void DamageEnemy() 
     {
-        if (other.CompareTag("playerBullet"))
-        {
-            Destroy(other.gameObject); // Destroy the player's bullet
-            hitCount++;
+        hitCount++;
 
-            if (hitCount == 1)
-            {
-                StartCoroutine(RunAway());
-            }
-            else if (hitCount > 1)
-            {
-                StartCoroutine(DieAndDestroy());
-            }
+        if (hitCount == 1)
+        {
+            StartCoroutine(RunAway());
+        }
+        else if (hitCount > 1)
+        {
+            StartCoroutine(DieAndDestroy());
         }
     }
 
@@ -131,7 +130,7 @@ public class EnemyBehavior : MonoBehaviour
         float runAwayTime = 2f; // Time spent running away
         float elapsedTime = 0f;
 
-        while (elapsedTime < runAwayTime)
+        while (elapsedTime < runAwayTime && !dead)
         {
             Vector3 direction = (transform.position - player.transform.position).normalized;
             transform.position += direction * speed * Time.deltaTime;
@@ -175,6 +174,7 @@ public class EnemyBehavior : MonoBehaviour
         canShoot = false;
         float elapsedTime = 0f;
         animator.SetTrigger("Dead");
+        dead = true;
         while (elapsedTime < deathDuration)
         {
             elapsedTime += Time.deltaTime;
@@ -193,7 +193,7 @@ public class EnemyBehavior : MonoBehaviour
         isRunningAway = !isRunningAway;
         float startAngle = transform.eulerAngles.y;
         float approxAngle = startAngle;
-        while (approxAngle < startAngle + 180)
+        while (approxAngle < startAngle + 180 && !dead)
         {
             approxAngle += 1;
             transform.eulerAngles = new Vector3(0,approxAngle, 0);
@@ -225,5 +225,13 @@ public class EnemyBehavior : MonoBehaviour
             stopped = true;
         }
         
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (drawRange) 
+        {
+            Gizmos.DrawSphere(transform.position, detectionRange);
+        }
     }
 }

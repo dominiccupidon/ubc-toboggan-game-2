@@ -20,9 +20,12 @@ public class ViewScript : MonoBehaviour
 
     public void keyPressed(string key) 
     {
-        if (key == "<" && currentVal.Length > 0)
+        if (key == "<")
         {
-            currentVal = currentVal.Remove(currentVal.Length - 1);
+            if (currentVal.Length > 0) 
+            {
+                currentVal = currentVal.Remove(currentVal.Length - 1);
+            }
         }
         else if (key == "_")
         {
