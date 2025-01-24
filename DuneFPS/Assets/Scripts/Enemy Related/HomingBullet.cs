@@ -70,7 +70,7 @@ public class HomingBullet : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             // Destroy the bullet when it hits the player
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         else if (collision.gameObject.CompareTag("Rock"))
         {

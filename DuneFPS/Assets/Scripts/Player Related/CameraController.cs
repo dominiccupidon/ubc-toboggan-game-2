@@ -30,6 +30,7 @@ public class CameraController : MonoBehaviour
     bool isCrouched = false;
     bool isRunning = false;
 
+    PauseManager pauseManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,13 +46,19 @@ public class CameraController : MonoBehaviour
         headInitVec = head.localPosition;
         headNewVec = headInitVec;
         headNewVec.y = -0.75f;
+
+        pauseManager = GameObject.FindGameObjectWithTag("PauseScreen").GetComponent<PauseManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        LookAround();
-        AcceptInput();
+        if (!pauseManager.IsPaused()) 
+        {
+            LookAround();
+            AcceptInput();
+        }
+
     }
 
     void FixedUpdate()

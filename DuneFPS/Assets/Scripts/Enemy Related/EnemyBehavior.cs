@@ -175,6 +175,10 @@ public class EnemyBehavior : MonoBehaviour
         float elapsedTime = 0f;
         animator.SetTrigger("Dead");
         dead = true;
+
+        GetComponent<Rigidbody>().useGravity = false;
+        GetComponent<Collider>().enabled = false;
+       
         while (elapsedTime < deathDuration)
         {
             elapsedTime += Time.deltaTime;

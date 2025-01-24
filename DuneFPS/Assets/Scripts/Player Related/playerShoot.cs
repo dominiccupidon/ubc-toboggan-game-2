@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class playerShoot : MonoBehaviour
 {
@@ -18,10 +19,17 @@ public class playerShoot : MonoBehaviour
     private float bulletTime;
     private bool isInCooldown = false;
 
+    private TextMeshProUGUI tmp;
+    GameObject cooldown;
+
     // Start is called before the first frame update
     void Start()
     {
         maxShots = semiAutomatic ? 12 : 40;
+        tmp = GameObject.FindGameObjectWithTag("AmmoCount").GetComponent<TextMeshProUGUI>();
+        tmp.text = getRemainingShots() + "/" + maxShots;
+        cooldown = tmp.transform.GetChild(0).gameObject;
+        cooldown.SetActive(false);
     }
 
     // Update is called once per frame
@@ -29,7 +37,7 @@ public class playerShoot : MonoBehaviour
     {
         if (isInCooldown) return;
 
-        if (currentShots >= maxShots) 
+        if (currentShots > maxShots) 
         {
             StartCoroutine(Cooldown());
             return;
@@ -88,29 +96,39 @@ public class playerShoot : MonoBehaviour
 
             if (collision.transform.CompareTag("Enemy")) 
             {
-                Debug.Log(collision.transform.name);
+                //Debug.Log(collision.transform.name);
                 collision.transform.gameObject.GetComponent<EnemyBehavior>().DamageEnemy();
             }
             GameObject impactInst = Instantiate(impactEffect, collision.point, Quaternion.LookRotation(collision.normal));
             Destroy(impactInst, 1f);
-            currentShots++;
+            tmp.text = getRemainingShots() + "/" + maxShots;
+
         }
+
+        currentShots++;
     }
 
     IEnumerator Cooldown()
     {
         isInCooldown = true;
-        Debug.Log("Entering cooldown");
-
+        //Debug.Log("Entering cooldown");
+        cooldown.SetActive(true);
         yield return new WaitForSeconds(cooldownTime); // waits for time specified in game
 
         currentShots = 0;
         isInCooldown = false;
+        tmp.text = getRemainingShots() + "/" + maxShots;
+        cooldown.SetActive(false);
     }
 
     Vector3 GetShootDirection()
     {
         // TODO: Determine how to have the gun point in the same direction as the camera
         return Camera.main.transform.forward;
+    }
+
+    public int getRemainingShots() 
+    {
+        return maxShots - currentShots;
     }
 }
