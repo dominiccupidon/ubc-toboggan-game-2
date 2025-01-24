@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using WiimoteApi;
 
 public class PauseManager : MonoBehaviour
 {
     bool isPaused = false;
+    bool isWiimoteConnected;
     Color notSelected;
     Color selected;
+    Wiimote remote;
     [SerializeField ]GameObject pausePanel;
     [SerializeField] GameObject exitPanel;
     [SerializeField] GameObject controlsPanel;
@@ -23,6 +26,9 @@ public class PauseManager : MonoBehaviour
     [SerializeField] Material WiiDpad;
     [SerializeField] Material WiiHome;
 
+    [SerializeField] GameObject gunModel;
+
+
     Material[] BaseWiimote2 = new Material[7];
     Material[] WiiA2 = new Material[7];
     Material[] WiiB2 = new Material[7];
@@ -35,7 +41,10 @@ public class PauseManager : MonoBehaviour
         notSelected = new Color(255f/255, 187f/255, 109f/255);
         selected = new Color(255f/255, 167f/255, 66f/255);
         pausePanel.SetActive(false);
-
+        if (InputManager.Instance.remote != null) {
+            remote = InputManager.Instance.remote;
+            isWiimoteConnected = true;
+        }
 
         for (int i = 0; i < 7; i++)
         {
@@ -48,8 +57,16 @@ public class PauseManager : MonoBehaviour
     }
     void Update()
     {
-        //Remove this
-        if (Input.GetKeyDown(KeyCode.Space)){
+        bool isHomeButtonPressed = false;
+        if (isWiimoteConnected) {
+            int ret;
+            do {
+                ret = remote.ReadWiimoteData();
+            } while (ret > 0);
+            isHomeButtonPressed = remote.Button.home;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space) || isHomeButtonPressed){
             PauseFunction();
         }
     }
@@ -78,6 +95,8 @@ public class PauseManager : MonoBehaviour
     {
         controlsPanel.SetActive(true);
         pausePanel.SetActive(false);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
     }
@@ -106,6 +125,8 @@ public class PauseManager : MonoBehaviour
     {
         gameControlButtons.SetActive(true);
         UIControlButtons.SetActive(false);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         selectGame.color = selected;
         selectUI.color = notSelected;
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
@@ -114,6 +135,8 @@ public class PauseManager : MonoBehaviour
     {
         gameControlButtons.SetActive(false);
         UIControlButtons.SetActive(true);
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         selectGame.color = notSelected;
         selectUI.color = selected;
         wiimote3D.GetComponent<MeshRenderer>().materials = BaseWiimote2;
@@ -121,22 +144,35 @@ public class PauseManager : MonoBehaviour
 
     public void HighlightA() 
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiA2;
     }
     public void HighlightB()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, -90);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiB2;
     }
     public void HighlightDPad()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiDpad2;
     }
     public void HighlightHome()
     {
+        wiimote3D.SetActive(true);
+        gunModel.SetActive(false);
         wiimote3D.transform.localRotation = Quaternion.Euler(-90, 180, 0);
         wiimote3D.GetComponent<MeshRenderer>().materials = WiiHome2;
+    }
+    public void HighlightTrigger() 
+    {
+        wiimote3D.SetActive(false);
+        gunModel.SetActive(true);
     }
 }
