@@ -84,8 +84,13 @@ public class PauseManager : MonoBehaviour
             pausePanel.SetActive(true);
             Time.timeScale = 0;
             Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
         isPaused = !isPaused;
+
+        Canvas uiCan = transform.parent.GetComponent<Canvas>();
+        uiCan.worldCamera = GameObject.FindGameObjectWithTag("Player").transform.GetChild(0).GetComponent<Camera>();
+        uiCan.planeDistance = 0.4f;
     }
 
     public bool IsPaused() 

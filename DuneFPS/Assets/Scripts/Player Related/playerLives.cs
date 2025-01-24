@@ -30,7 +30,37 @@ public class PlayerLives : MonoBehaviour
             UpdateHeartUI(); // Update the heart UI when a life is regained
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        // Destroy the bullet
+        if (other.gameObject.CompareTag("enemyBullet")) 
+        {
+            Destroy(other.gameObject);
+            // Reduce player's lives
+            lives--;
 
+            // Update the last hit time
+            lastHitTime = Time.time;
+
+            // Check if player has no more lives
+            if (lives <= 0)
+            {
+                // Player dies; transition to Game Over scene
+                SceneManager.LoadScene(gameOverSceneName);
+            }
+            else
+            {
+                Debug.Log("Player hit! Lives remaining: " + lives);
+            }
+
+            UpdateHeartUI(); // Update the heart UI when a life is lost
+        }
+        
+
+
+
+    }
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         // Check if the collision is with an enemy bullet
@@ -59,6 +89,7 @@ public class PlayerLives : MonoBehaviour
             UpdateHeartUI(); // Update the heart UI when a life is lost
         }
     }
+    */
 
     // Updates the heart UI based on the player's current lives
     private void UpdateHeartUI()
