@@ -5,28 +5,8 @@ using UnityEngine.SceneManagement; // For scene management
 [RequireComponent(typeof(BoxCollider))]
 public class VisibleCollider : MonoBehaviour
 {
-    public Material visibleMaterial; // Assign a transparent material in the inspector
     public Text warningText; // Reference to a UI Text element in your scene
     private int collisionCount = 0; // Tracks player collisions
-
-    private GameObject visualRepresentation;
-
-    void Start()
-    {
-        // Set up the visible collider mesh
-        BoxCollider boxCollider = GetComponent<BoxCollider>();
-        visualRepresentation = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        visualRepresentation.transform.SetParent(transform);
-        visualRepresentation.transform.localPosition = boxCollider.center;
-        visualRepresentation.transform.localScale = boxCollider.size;
-
-        if (visibleMaterial != null)
-        {
-            visualRepresentation.GetComponent<MeshRenderer>().material = visibleMaterial;
-        }
-
-        Destroy(visualRepresentation.GetComponent<BoxCollider>()); // Remove collider from the visual object
-    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -70,13 +50,5 @@ public class VisibleCollider : MonoBehaviour
     {
         // Restart the level
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    void OnDestroy()
-    {
-        if (visualRepresentation != null)
-        {
-            Destroy(visualRepresentation);
-        }
     }
 }
