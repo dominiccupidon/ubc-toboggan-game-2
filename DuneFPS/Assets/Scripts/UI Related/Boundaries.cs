@@ -1,11 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI; // For UI elements
+using TMPro; // For TextMeshPro
 using UnityEngine.SceneManagement; // For scene management
 
 [RequireComponent(typeof(BoxCollider))]
 public class VisibleCollider : MonoBehaviour
 {
-    public Text warningText; // Reference to a UI Text element in your scene
+    public TMP_Text warningText; // Reference to a TextMeshPro UI element
     private int collisionCount = 0; // Tracks player collisions
 
     private void OnCollisionEnter(Collision collision)
